@@ -1,15 +1,17 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import ProtectedRoute from './components/ProtectedRoute'
-import Login from './pages/LoginOrRegisterPage/Login'
-import Register from './pages/LoginOrRegisterPage/Register'
-
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/LoginOrRegisterPage/Login";
+import Register from "./pages/LoginOrRegisterPage/Register";
+import HomePage from "./pages/HomePage/HomePage";
 
 function App() {
-
   return (
     <>
       <BrowserRouter>
+        <HomePage />
+      </BrowserRouter>
+      {/* <BrowserRouter>
         <Routes>
         <Route
           exact
@@ -29,9 +31,9 @@ function App() {
             element={<Register />}
           />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
