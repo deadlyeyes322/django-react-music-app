@@ -39,6 +39,7 @@ export default function NavBar() {
               type="text"
               onChange={onChangeMusicBar}
             />
+            <button type="">Search</button>
             {BarShowing && (
               <div className="found-bar">
                 {musics
