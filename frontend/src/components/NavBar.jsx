@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-export default function NavBar() {
+export default function NavBar({ token }) {
   const [BarShowing, setBarShowing] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const musics = [
@@ -29,6 +30,20 @@ export default function NavBar() {
     }
   };
 
+  const searchTrack = async (e) => {
+    e.preventDefault();
+    const { data } = await axios.get("https://api.spotify.com/v1/search", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        q: `${inputValue}`,
+        type: "track",
+    }
+    });
+    console.log(data.tracks.items[0].artists[0].name);
+  };
+
   return (
     <>
       <nav className="menu">
@@ -37,23 +52,25 @@ export default function NavBar() {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <input
-              className="music-found"
-              type="text"
-              onChange={onChangeMusicBar}
-            />
-            <button type="">Search</button>
-            {BarShowing && (
-              <div className="found-bar">
-                {musics
-                  .filter((elem) =>
-                    elem.name.toLowerCase().includes(inputValue.toLowerCase())
-                  )
-                  .map((elem) => (
-                    <div>{elem.name}</div>
-                  ))}
-              </div>
-            )}
+            <form onSubmit={searchTrack}>
+              <input
+                className="music-found"
+                type="text"
+                onChange={onChangeMusicBar}
+              />
+              <button type={"submit"}>Search</button>
+              {BarShowing && (
+                <div className="found-bar">
+                  {musics
+                    .filter((elem) =>
+                      elem.name.toLowerCase().includes(inputValue.toLowerCase())
+                    )
+                    .map((elem) => (
+                      <div>{elem.name}</div>
+                    ))}
+                </div>
+              )}
+            </form>
           </li>
           <li>
             <Link to="123">My page</Link>
