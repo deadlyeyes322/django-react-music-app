@@ -29,13 +29,20 @@ function App() {
       .then((data) => setToken(data.access_token));
   }, []);
 
-  console.log(token)
   return (
     <>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route exact path="/" element={<HomePage token={token}/>} />
+            <Route
+              exact
+              path="/"
+              element={
+                <spotifyStoreContext.Provider value={token}>
+                  <HomePage />
+                </spotifyStoreContext.Provider>
+              }
+            />
             <Route exact path="*" element={<UndefinedPage />} />
           </Routes>
         </BrowserRouter>

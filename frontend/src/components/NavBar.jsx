@@ -4,20 +4,9 @@ import axios from "axios";
 import { spotifyStoreContext } from "../App";
 
 export default function NavBar() {
-  const [BarShowing, setBarShowing] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [musics, setMusics] = useState([]);
   const token = useContext(spotifyStoreContext);
-
-  const onChangeMusicBar = (e) => {
-    if (e.target.value) {
-      setBarShowing(true);
-      setInputValue(e.target.value);
-    } else {
-      setBarShowing(false);
-      setInputValue("");
-    }
-  };
 
   const searchTrack = async (e) => {
     try {
@@ -37,19 +26,29 @@ export default function NavBar() {
     }
   };
 
-  const onChangeMusicBar2 = async (e) => {
+  const onChangeMusicBar = async (e) => {
     if (!e.target.value) {
-      setBarShowing(false);
       setInputValue("");
       setMusics([]);
       return;
     }
 
     setInputValue(e.target.value);
-
     const searchData = await searchTrack();
-    for (var item=0; item < 11; item++) {
-      let copyMusic = musics.map(elem => elem).push({ id: searchData.items[item].id, name: searchData.items[item].name });
+
+    for (var item = 0; item < 20; item++) {
+      let copyMusic = musics.map((elem) => elem);
+      let check = false;
+      for (var i = 0; i < copyMusic.length; i++) {
+        if (copyMusic[i].id === searchData.items[item].id) check = true;
+      }
+      if (!check) {
+        copyMusic.push({
+          id: searchData.items[item].id,
+          artist: searchData.items[item].artists.map((elem) => elem.name),
+          name: searchData.items[item].name,
+        });
+      }
       setMusics(copyMusic);
     }
     console.log(musics);
@@ -67,20 +66,20 @@ export default function NavBar() {
               <input
                 className="music-found"
                 type="text"
-                onChange={onChangeMusicBar2}
+                onChange={onChangeMusicBar}
               />
               <button type={"submit"}>Search</button>
-              {/* {BarShowing && (
+              {musics.length > 0 && (
                 <div className="found-bar">
                   {musics
-                    .filter((elem) =>
-                      elem.name.toLowerCase().includes(inputValue.toLowerCase())
-                    )
+                    // .filter((elem) =>
+                    //   elem.name.toLowerCase().includes(inputValue.toLowerCase())
+                    // )
                     .map((elem) => (
-                      <div>{elem.name}</div>
+                      <div key={elem.id}>{elem.artist.map(e => e)} - {elem.name}</div>
                     ))}
                 </div>
-              )} */}
+              )}
             </form>
           </li>
           <li>
