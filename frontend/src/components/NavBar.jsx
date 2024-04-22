@@ -14,6 +14,9 @@ export default function NavBar() {
     {
       name: "hello",
     },
+    {
+      name: "world"
+    }
   ];
 
   const onChangeMusicBar = (e) => {

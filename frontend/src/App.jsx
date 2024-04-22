@@ -15,31 +15,29 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route exact path="/" element={<HomePage />} />
+            <Route
+              exact
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <HomePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              exact
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <h1>Hello</h1>
+                </ProtectedRoute>
+              }
+            />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/register" element={<Register />} />
             <Route exact path="*" element={<UndefinedPage />} />
           </Routes>
         </BrowserRouter>
-        {/* <BrowserRouter>
-        <Routes>
-        <Route
-          exact
-          path="/"
-          element={
-            <ProtectedRoute>
-              <h1>Hello</h1>
-            </ProtectedRoute>
-          }
-        />
-          <Route exact
-            path="/login"
-            element={<Login />}
-          />
-          <Route exact
-            path="/register"
-            element={<Register />}
-          />
-        </Routes>
-      </BrowserRouter> */}
       </QueryClientProvider>
     </>
   );
