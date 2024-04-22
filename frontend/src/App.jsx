@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -9,6 +9,8 @@ import UndefinedPage from "./pages/UndefinedPage/UndefinedPage";
 import { CLIENT_ID, CLIENT_SECRET } from "./constants";
 
 const queryClient = new QueryClient();
+
+export const spotifyStoreContext = createContext();
 
 function App() {
   const [token, setToken] = useState("");
@@ -27,23 +29,13 @@ function App() {
       .then((data) => setToken(data.access_token));
   }, []);
 
-  console.log(token);
+  console.log(token)
   return (
     <>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route
-              exact
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <HomePage token={token} />
-                </ProtectedRoute>
-              }
-            />
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/register" element={<Register />} />
+            <Route exact path="/" element={<HomePage token={token}/>} />
             <Route exact path="*" element={<UndefinedPage />} />
           </Routes>
         </BrowserRouter>
