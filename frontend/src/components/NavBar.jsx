@@ -1,24 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { spotifyStoreContext } from "../App";
 
-export default function NavBar({ token }) {
+export default function NavBar() {
   const [BarShowing, setBarShowing] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const musics = [
-    {
-      name: "Катафалка",
-    },
-    {
-      name: "каток",
-    },
-    {
-      name: "hello",
-    },
-    {
-      name: "world"
-    }
-  ];
+  const [musics, setMusics] = useState([]);
+  const token = useContext(spotifyStoreContext);
 
   const onChangeMusicBar = (e) => {
     if (e.target.value) {
@@ -31,17 +20,39 @@ export default function NavBar({ token }) {
   };
 
   const searchTrack = async (e) => {
-    e.preventDefault();
-    const { data } = await axios.get("https://api.spotify.com/v1/search", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        q: `${inputValue}`,
-        type: "track",
+    try {
+      const { data } = await axios.get("https://api.spotify.com/v1/search", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          q: `${inputValue}`,
+          type: "track",
+        },
+      });
+
+      return data.tracks;
+    } catch (error) {
+      console.log(error);
     }
-    });
-    console.log(data.tracks.items[0].artists[0].name);
+  };
+
+  const onChangeMusicBar2 = async (e) => {
+    if (!e.target.value) {
+      setBarShowing(false);
+      setInputValue("");
+      setMusics([]);
+      return;
+    }
+
+    setInputValue(e.target.value);
+
+    const searchData = await searchTrack();
+    for (var item=0; item < 11; item++) {
+      let copyMusic = musics.map(elem => elem).push({ id: searchData.items[item].id, name: searchData.items[item].name });
+      setMusics(copyMusic);
+    }
+    console.log(musics);
   };
 
   return (
@@ -52,14 +63,14 @@ export default function NavBar({ token }) {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <form onSubmit={searchTrack}>
+            <form>
               <input
                 className="music-found"
                 type="text"
-                onChange={onChangeMusicBar}
+                onChange={onChangeMusicBar2}
               />
               <button type={"submit"}>Search</button>
-              {BarShowing && (
+              {/* {BarShowing && (
                 <div className="found-bar">
                   {musics
                     .filter((elem) =>
@@ -69,7 +80,7 @@ export default function NavBar({ token }) {
                       <div>{elem.name}</div>
                     ))}
                 </div>
-              )}
+              )} */}
             </form>
           </li>
           <li>

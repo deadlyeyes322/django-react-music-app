@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -10,8 +10,10 @@ import { CLIENT_ID, CLIENT_SECRET } from "./constants";
 
 const queryClient = new QueryClient();
 
+export const spotifyStoreContext = createContext();
+
 function App() {
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState("");
 
   useEffect(() => {
     var authParams = {
@@ -23,17 +25,24 @@ function App() {
     };
 
     fetch(`https://accounts.spotify.com/api/token`, authParams)
-    .then(res => res.json())
-    .then(data => setToken(data.access_token))
+      .then((res) => res.json())
+      .then((data) => setToken(data.access_token));
   }, []);
 
-  console.log(token)
   return (
     <>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route exact path="/" element={<HomePage />} />
+            <Route
+              exact
+              path="/"
+              element={
+                <spotifyStoreContext.Provider value={token}>
+                  <HomePage />
+                </spotifyStoreContext.Provider>
+              }
+            />
             <Route exact path="*" element={<UndefinedPage />} />
           </Routes>
         </BrowserRouter>
