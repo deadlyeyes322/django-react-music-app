@@ -18,11 +18,11 @@ class MusicListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Music.objects.filter(author=user)
+        return Music.objects.all()
     
     def perform_create(self, serializer):
         if serializer.is_valid():
-            serializer.save(author=self.request.user)
+            serializer.save()
         else:
             print(serializer.errors)
 
@@ -33,4 +33,4 @@ class MusicDelete(generics.DestroyAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return Music.objects.filter(author=user)
+        return Music.objects.all()

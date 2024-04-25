@@ -31,6 +31,7 @@ function ProtectedRoute({ children }) {
     };
 
     const auth = async () => {
+        console.log(localStorage.getItem(ACCESS_TOKEN))
         const token = localStorage.getItem(ACCESS_TOKEN);
         if (!token) {
             setIsAuthorized(false);

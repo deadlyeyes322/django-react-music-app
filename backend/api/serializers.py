@@ -16,5 +16,13 @@ class UserSerializer(serializers.ModelSerializer):
 class MusicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Music
-        fields = ["id", "song_title", "artist_name", "rating", "created_at", "author"]
-        extra_kwargs = {"author": {"read_only": True}}
+        fields = ["id", "song_title", "artist_name", "image"]
+
+    def create(self, validated_data):
+        music = Music(
+            song_title=validated_data['song_title'],
+            artist_name=validated_data['artist_name'],
+            image=validated_data['image']
+        )
+        music.save()
+        return music

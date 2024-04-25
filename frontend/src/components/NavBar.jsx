@@ -1,12 +1,13 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { spotifyStoreContext } from "../App";
+import { spotifyTokenStoreContext } from "../App";
 
 export default function NavBar() {
   const [inputValue, setInputValue] = useState("");
   const [musics, setMusics] = useState([]);
-  const token = useContext(spotifyStoreContext);
+  const token = useContext(spotifyTokenStoreContext);
+  const navigate = useNavigate();
 
   const searchTrack = async (e) => {
     try {
@@ -51,7 +52,11 @@ export default function NavBar() {
       }
       setMusics(copyMusic);
     }
-    console.log(musics);
+  };
+
+  const navigateToMusicPage = (e) => {
+    e.preventDefault();
+    navigate(`/music/${e.target.id}`);
   };
 
   return (
@@ -71,13 +76,19 @@ export default function NavBar() {
               <button type={"submit"}>Search</button>
               {musics.length > 0 && (
                 <div className="found-bar">
-                  {musics
-                    // .filter((elem) =>
-                    //   elem.name.toLowerCase().includes(inputValue.toLowerCase())
-                    // )
-                    .map((elem) => (
-                      <div key={elem.id}>{elem.artist.map(e => e)} - {elem.name}</div>
-                    ))}
+                  <ul>
+                    {musics
+                      // .filter((elem) =>
+                      //   elem.name.toLowerCase().includes(inputValue.toLowerCase())
+                      // )
+                      .map((elem) => (
+                        <li key={elem.id}>
+                          <button id={elem.id} type="button" onClick={navigateToMusicPage}>
+                            {elem.artist.map((e) => e)} - {elem.name}
+                          </button>
+                        </li>
+                      ))}
+                  </ul>
                 </div>
               )}
             </form>

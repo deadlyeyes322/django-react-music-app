@@ -12,11 +12,12 @@ export default function Form({ route, method }) {
   const name = method === "login" ? "Login" : "Register";
 
   const handleSubmit = async (e) => {
-    setLoading(True);
+    // setLoading(True);
     e.preventDefault();
 
     try {
-      const res = await api.post(route, { username, password })
+      console.log(route)
+      const res = await api.post(route +'/', { username, password });
       if (method === "login") {
           localStorage.setItem(ACCESS_TOKEN, res.data.access);
           localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
