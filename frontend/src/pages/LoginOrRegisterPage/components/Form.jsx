@@ -16,42 +16,42 @@ export default function Form({ route, method }) {
     e.preventDefault();
 
     try {
-      console.log(route)
-      const res = await api.post(route +'/', { username, password });
+      console.log(route);
+      const res = await api.post(route + "/", { username, password });
       if (method === "login") {
-          localStorage.setItem(ACCESS_TOKEN, res.data.access);
-          localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
-          navigate("/")
+        localStorage.setItem(ACCESS_TOKEN, res.data.access);
+        localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+        navigate("/");
       } else {
-          navigate("/login")
+        navigate("/login");
       }
-  } catch (error) {
-      alert(error)
-  } finally {
-      setLoading(false)
-  }
-};
+    } catch (error) {
+      alert(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
       <form onSubmit={handleSubmit} className="form-containter">
-        <h1>{name}</h1>
-        <input
-          className="form-input"
+        <h1 class="display-6 text-center">{name}</h1>
+        <input 
+          className="form-input form-control"
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
         />
         <input
-          className="form-input"
+          className="form-input form-control"
           type="text"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
         {/* {loading && <Loading />} */}
-        <button className="form-button" type="submit">
+        <button className="form-button btn btn-primary" type="submit">
           {name}
         </button>
       </form>

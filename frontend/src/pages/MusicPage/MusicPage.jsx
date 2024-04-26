@@ -51,6 +51,7 @@ const MusicPage = () => {
           <>
             <div className="image-open" onClick={handleClick}>
               <img
+                class="rounded mx-auto d-block"
                 src={dataRef.current.album?.images[0]?.url}
                 width="600"
                 height="600"
