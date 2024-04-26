@@ -46,7 +46,7 @@ const MusicPage = () => {
     <>
       <div className="MusicPage">
         <NavBar />
-        {isLoading && <Loading />}
+        {/* {isLoading && <Loading />} */}
         {showImage ? (
           <>
             <div className="image-open" onClick={handleClick}>
@@ -60,14 +60,14 @@ const MusicPage = () => {
         ) : (
           <>
             <div className="music">
-              <h1>
+              <h6 class="display-6 text-center">
                 {dataRef.current?.artists?.map((e) => e.name)} - "
                 {dataRef.current.name}"
-              </h1>
+              </h6>
             </div>
             <div className="main-track-poster">
               <img
-                class="rounded float-start"
+                class="rounded mx-auto d-block"
                 src={dataRef.current.album?.images[0]?.url}
                 width="300"
                 height="300"
