@@ -61,42 +61,65 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="menu">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <form>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <Link to="/" class="navbar-brand">
+            Home
+          </Link>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <Link to="123" class="nav-link active">
+                  My peofile
+                </Link>
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
               <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
                 className="music-found"
-                type="text"
                 onChange={onChangeMusicBar}
               />
-              <button type={"submit"}>Search</button>
+              <button type={"submit"} class="btn btn-outline-success">
+                Search
+              </button>
               {musics.length > 0 && (
-                <div className="found-bar">
-                  <ul>
-                    {musics
-                      // .filter((elem) =>
-                      //   elem.name.toLowerCase().includes(inputValue.toLowerCase())
-                      // )
-                      .map((elem) => (
-                        <li key={elem.id}>
-                          <button id={elem.id} type="button" onClick={navigateToMusicPage}>
-                            {elem.artist.map((e) => e)} - {elem.name}
-                          </button>
-                        </li>
-                      ))}
-                  </ul>
-                </div>
+                <ul>
+                  {musics
+                    // .filter((elem) =>
+                    //   elem.name.toLowerCase().includes(inputValue.toLowerCase())
+                    // )
+                    .map((elem) => (
+                      <li key={elem.id}>
+                        <button
+                          class="dropdown-item btn btn-secondary dropdown-toggle"
+                          id={elem.id}
+                          type="button"
+                          onClick={navigateToMusicPage}
+                        >
+                          {elem.artist.map((e) => e)} - {elem.name}
+                        </button>
+                      </li>
+                    ))}
+                </ul>
               )}
             </form>
-          </li>
-          <li>
-            <Link to="123">My page</Link>
-          </li>
-        </ul>
+          </div>
+        </div>
       </nav>
     </>
   );

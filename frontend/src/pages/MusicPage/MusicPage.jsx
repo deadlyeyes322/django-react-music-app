@@ -67,6 +67,7 @@ const MusicPage = () => {
             </div>
             <div className="main-track-poster">
               <img
+                class="rounded float-start"
                 src={dataRef.current.album?.images[0]?.url}
                 width="300"
                 height="300"
