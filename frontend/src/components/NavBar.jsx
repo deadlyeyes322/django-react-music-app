@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { spotifyTokenStoreContext } from "../App";
 
@@ -8,6 +8,16 @@ export default function NavBar() {
   const [musics, setMusics] = useState([]);
   const token = useContext(spotifyTokenStoreContext);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const postQuery = searchParams.get('post') || '';
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const query = inputValue;
+
+    setSearchParams({post: query});
+  }
 
   const searchTrack = async (e) => {
     try {
@@ -44,8 +54,8 @@ export default function NavBar() {
         if (copyMusic[i].id === searchData.items[item].id) check = true;
       }
       if (!check) {
-        copyMusic.push({
-          id: searchData.items[item].id,
+        await copyMusic.push({
+          id: searchData?.items[item]?.id,
           artist: searchData.items[item].artists.map((elem) => elem.name),
           name: searchData.items[item].name,
         });
@@ -56,18 +66,18 @@ export default function NavBar() {
 
   const navigateToMusicPage = (e) => {
     e.preventDefault();
-    navigate(`/music/${e.target.id}`);
+    navigate(`/music/${e.target.id}`, {replace: true});
   };
 
   return (
     <>
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
+      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <div className="container-fluid">
           <Link to="/" class="navbar-brand">
             Home
           </Link>
           <button
-            class="navbar-toggler"
+            className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
@@ -75,52 +85,33 @@ export default function NavBar() {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-            <span class="navbar-toggler-icon"></span>
+            <span className="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <Link to="123" class="nav-link active">
-                  My peofile
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <Link to="123" className="nav-link active">
+                  My profile
                 </Link>
               </li>
             </ul>
-            <form class="d-flex" role="search">
+            <form className="d-flex" role="search" onSubmit={handleSubmit}>
               <input
-                class="form-control me-2"
+                className="form-control me-2 music-found"
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
-                className="music-found"
                 onChange={onChangeMusicBar}
               />
-              <button type={"submit"} class="btn btn-outline-success">
+              <button type={"submit"} music-found="btn btn-outline-success">
                 Search
               </button>
-              {musics.length > 0 && (
-                <ul>
-                  {musics
-                    // .filter((elem) =>
-                    //   elem.name.toLowerCase().includes(inputValue.toLowerCase())
-                    // )
-                    .map((elem) => (
-                      <li key={elem.id}>
-                        <button
-                          class="dropdown-item btn btn-secondary dropdown-toggle"
-                          id={elem.id}
-                          type="button"
-                          onClick={navigateToMusicPage}
-                        >
-                          {elem.artist.map((e) => e)} - {elem.name}
-                        </button>
-                      </li>
-                    ))}
-                </ul>
-              )}
             </form>
           </div>
         </div>
       </nav>
+
+      <Outlet />
     </>
   );
 }

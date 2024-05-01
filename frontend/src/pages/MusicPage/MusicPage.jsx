@@ -6,7 +6,7 @@ import { spotifyTokenStoreContext } from "../../App";
 import Loading from "../../components/Loading";
 
 const MusicPage = () => {
-  const dataRef = useRef({});
+  const [dataState, setDataState] = useState({});
   const { id } = useParams();
   const token = useContext(spotifyTokenStoreContext);
   const [showImage, setShowImage] = useState(false);
@@ -31,8 +31,8 @@ const MusicPage = () => {
       }
     };
     Fetching().then((trackData) => {
-      dataRef.current = trackData;
-      console.log(dataRef.current);
+      setDataState(trackData);
+      console.log(dataState);
     });
 
     setIsLoading(true);
@@ -45,14 +45,13 @@ const MusicPage = () => {
   return (
     <>
       <div className="MusicPage">
-        <NavBar />
         {/* {isLoading && <Loading />} */}
         {showImage ? (
           <>
             <div className="image-open" onClick={handleClick}>
               <img
                 class="rounded mx-auto d-block"
-                src={dataRef.current.album?.images[0]?.url}
+                src={dataState?.album?.images[0]?.url}
                 width="600"
                 height="600"
               />
@@ -61,15 +60,15 @@ const MusicPage = () => {
         ) : (
           <>
             <div className="music">
-              <h6 class="display-6 text-center">
-                {dataRef.current?.artists?.map((e) => e.name)} - "
-                {dataRef.current.name}"
+              <h6 className="display-6 text-center">
+                {dataState?.artists?.map((e) => e.name)} - "
+                {dataState?.name}"
               </h6>
             </div>
             <div className="main-track-poster">
               <img
-                class="rounded mx-auto d-block"
-                src={dataRef.current.album?.images[0]?.url}
+                className="rounded mx-auto d-block"
+                src={dataState?.album?.images[0]?.url}
                 width="300"
                 height="300"
                 onClick={handleClick}

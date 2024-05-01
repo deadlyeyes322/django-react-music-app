@@ -1,4 +1,4 @@
-export default function MainLabel({status, data, isFetching, error}) {
+export default function MainLabel() {
 
     return <div>Home Page</div>
 }

@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import UndefinedPage from "./pages/UndefinedPage/UndefinedPage";
 import MusicPage from "./pages/MusicPage/MusicPage";
 import { CLIENT_ID, CLIENT_SECRET } from "./constants";
+import NavBar from "./components/NavBar";
 
 const queryClient = new QueryClient();
 
@@ -36,53 +37,41 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route
-              exact
               path="/"
               element={
-                <ProtectedRoute>
-                  <spotifyTokenStoreContext.Provider value={token}>
-                    <HomePage />
-                  </spotifyTokenStoreContext.Provider>
-                </ProtectedRoute>
+                <spotifyTokenStoreContext.Provider value={token}>
+                  <NavBar />
+                </spotifyTokenStoreContext.Provider>
               }
-            />
-            <Route
-              exact
-              path="/music/:id"
-              element={
-                <ProtectedRoute>
-                  <spotifyTokenStoreContext.Provider value={token}>
-                    <MusicPage />
-                  </spotifyTokenStoreContext.Provider>
-                </ProtectedRoute>
-              }
-            />
+            >
+              <Route
+                exact
+                index
+                element={
+                  <ProtectedRoute>
+                    <spotifyTokenStoreContext.Provider value={token}>
+                      <HomePage />
+                    </spotifyTokenStoreContext.Provider>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                exact
+                path="/music/:id"
+                element={
+                  <ProtectedRoute>
+                    <spotifyTokenStoreContext.Provider value={token}>
+                      <MusicPage />
+                    </spotifyTokenStoreContext.Provider>
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
             <Route exact path="*" element={<UndefinedPage />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/register" element={<Register />} />
           </Routes>
         </BrowserRouter>
-        {/* <BrowserRouter>
-        <Routes>
-        <Route
-          exact
-          path="/"
-          element={
-            <ProtectedRoute>
-              <h1>Hello</h1>
-            </ProtectedRoute>
-          }
-        />
-          <Route exact
-            path="/login"
-            element={<Login />}
-          />
-          <Route exact
-            path="/register"
-            element={<Register />}
-          />
-        </Routes>
-      </BrowserRouter> */}
       </QueryClientProvider>
     </>
   );
