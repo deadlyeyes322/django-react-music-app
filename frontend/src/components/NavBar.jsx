@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { spotifyTokenStoreContext } from "../App";
@@ -10,13 +10,18 @@ export default function NavBar() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const postQuery = searchParams.get('post') || '';
+  const postQuery = searchParams.get("post") || "";
 
-  function handleSubmit(event) {
+  useEffect(() => {
+    if (searchParams.toString() != "")
+      navigate({ pathname: "/", search: searchParams.toString() });
+  }, [searchParams]);
+
+  async function handleSubmit(event) {
     event.preventDefault();
     const query = inputValue;
-
-    setSearchParams({post: query});
+    await setSearchParams({ post: query }, { replace: true });
+    console.log(searchParams);
   }
 
   const searchTrack = async (e) => {
@@ -66,7 +71,7 @@ export default function NavBar() {
 
   const navigateToMusicPage = (e) => {
     e.preventDefault();
-    navigate(`/music/${e.target.id}`, {replace: true});
+    navigate(`/music/${e.target.id}`, { replace: true });
   };
 
   return (
@@ -103,7 +108,7 @@ export default function NavBar() {
                 aria-label="Search"
                 onChange={onChangeMusicBar}
               />
-              <button type={"submit"} music-found="btn btn-outline-success">
+              <button type={"submit"} className="btn btn-outline-success">
                 Search
               </button>
             </form>
