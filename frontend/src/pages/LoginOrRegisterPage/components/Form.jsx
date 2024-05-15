@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../../constants";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../App";
 import api from "../../../api";
 
 export default function Form({ route, method }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const { username, setUsername, password, setPassword } =
+    useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -36,7 +37,7 @@ export default function Form({ route, method }) {
     <>
       <form onSubmit={handleSubmit} className="form-containter">
         <h1 class="display-6 text-center">{name}</h1>
-        <input 
+        <input
           className="form-input form-control"
           type="text"
           value={username}

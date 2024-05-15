@@ -9,13 +9,17 @@ import UndefinedPage from "./pages/UndefinedPage/UndefinedPage";
 import MusicPage from "./pages/MusicPage/MusicPage";
 import { CLIENT_ID, CLIENT_SECRET } from "./constants";
 import NavBar from "./components/NavBar";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 const queryClient = new QueryClient();
 
 export const spotifyTokenStoreContext = createContext();
+export const UserContext = createContext();
 
 function App() {
   const [token, setToken] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     var authParams = {
@@ -39,9 +43,11 @@ function App() {
             <Route
               path="/"
               element={
-                <spotifyTokenStoreContext.Provider value={token}>
-                  <NavBar />
-                </spotifyTokenStoreContext.Provider>
+                <UserContext.Provider value={username}>
+                  <spotifyTokenStoreContext.Provider value={token}>
+                    <NavBar />
+                  </spotifyTokenStoreContext.Provider>
+                </UserContext.Provider>
               }
             >
               <Route
@@ -66,10 +72,41 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                exact
+                path="/profile/:profile_id/:nickname"
+                element={
+                  <ProtectedRoute>
+                    <UserContext.Provider value={{ username, setUsername }}>
+                      <ProfilePage />
+                    </UserContext.Provider>
+                  </ProtectedRoute>
+                }
+              />
             </Route>
             <Route exact path="*" element={<UndefinedPage />} />
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/register" element={<Register />} />
+            <Route
+              exact
+              path="/login"
+              element={
+                <UserContext.Provider
+                  value={{ username, setUsername, password, setPassword }}
+                >
+                  <Login />
+                </UserContext.Provider>
+              }
+            />
+            <Route
+              exact
+              path="/register"
+              element={
+                <UserContext.Provider
+                  value={{ username, setUsername, password, setPassword }}
+                >
+                  <Register />
+                </UserContext.Provider>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

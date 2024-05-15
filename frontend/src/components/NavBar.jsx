@@ -1,9 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { spotifyTokenStoreContext } from "../App";
+import { UserContext, spotifyTokenStoreContext } from "../App";
+import api from "../api";
 
 export default function NavBar() {
+  const [id, setId] = useState("");
+  const username = useContext(UserContext);
   const [inputValue, setInputValue] = useState("");
   const [musics, setMusics] = useState([]);
   const token = useContext(spotifyTokenStoreContext);
@@ -74,6 +77,16 @@ export default function NavBar() {
     navigate(`/music/${e.target.id}`, { replace: true });
   };
 
+  useEffect(() => {
+    const getUserId = async () => {
+      const res = await api.get(
+        "api/find-users-by-nickname/?username=" + username
+      );
+      setId(res.data[0].id);
+    };
+    getUserId();
+  }, []);
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -95,7 +108,10 @@ export default function NavBar() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link to="123" className="nav-link active">
+                <Link
+                  to={"profile/" + id + "/" + username}
+                  className="nav-link active"
+                >
                   My profile
                 </Link>
               </li>
