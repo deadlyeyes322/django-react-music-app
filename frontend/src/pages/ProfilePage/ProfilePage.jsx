@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api";
 import { useEffect } from "react";
+import ProfileTracks from "./components/ProfileTracks";
 
 export default function ProfilePage() {
   const { profile_id, nickname } = useParams();
@@ -10,14 +11,12 @@ export default function ProfilePage() {
     const checkUserParams = async () => {
       try {
         const res = await api.get("api/user/register/");
-        console.log(res);
-        if (res.data[profile_id - 1] == undefined) {
+        console.log(res, profile_id, nickname);
+        const check = res.data.some((element) => {
+          return (element.id == profile_id) & (element.username == nickname);
+        });
+        if (!check) {
           navigate("/not_found");
-          return;
-        } else if (res.data[profile_id - 1].username != nickname) {
-            
-          navigate("/not_found");
-          return;
         }
       } catch (error) {
         alert(error);
@@ -27,5 +26,10 @@ export default function ProfilePage() {
     checkUserParams();
   }, []);
 
-  return <h1>Страница профиля {nickname}</h1>;
+  return (
+    <>
+      <h1>Страница профиля {nickname}</h1>
+      <ProfileTracks username={nickname}/>
+    </>
+  );
 }

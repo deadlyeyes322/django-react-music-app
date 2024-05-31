@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 class MusicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Music
-        fields = ["id", "song_title", "artist_name", "image"]
+        fields = ["id", "song_title", "artist_name", "spotify_id", "image"]
 
     def create(self, validated_data):
         return Music.objects.create(**validated_data)
@@ -26,6 +26,7 @@ class MusicSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.song_title = validated_data.get("song_title", instance.song_title)
         instance.artist_name = validated_data.get("artist_name", instance.artist_name)
+        instance.spotify_id = validated_data.get("artist_name", instance.artist_name)
         instance.image = validated_data.get("image", instance.image)
         instance.save()
         return instance
@@ -34,6 +35,6 @@ class MusicSerializer(serializers.ModelSerializer):
 class TrackRatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrackRating
-        fields = ["user", "track", "rating"]
+        fields = ["id", "user", "track", "rating"]
 
     

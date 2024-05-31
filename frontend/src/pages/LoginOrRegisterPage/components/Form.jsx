@@ -15,6 +15,7 @@ export default function Form({ route, method }) {
   const handleSubmit = async (e) => {
     // setLoading(True);
     e.preventDefault();
+    localStorage.setItem('nickname', username);
 
     try {
       console.log(route);

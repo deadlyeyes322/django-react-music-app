@@ -33,6 +33,7 @@ function App() {
     fetch(`https://accounts.spotify.com/api/token`, authParams)
       .then((res) => res.json())
       .then((data) => setToken(data.access_token));
+      console.log(username)
   }, []);
 
   return (

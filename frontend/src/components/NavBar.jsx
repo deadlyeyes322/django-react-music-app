@@ -6,7 +6,7 @@ import api from "../api";
 
 export default function NavBar() {
   const [id, setId] = useState("");
-  const username = useContext(UserContext);
+  const username = localStorage.getItem('nickname');
   const [inputValue, setInputValue] = useState("");
   const [musics, setMusics] = useState([]);
   const token = useContext(spotifyTokenStoreContext);
@@ -79,10 +79,10 @@ export default function NavBar() {
 
   useEffect(() => {
     const getUserId = async () => {
-      const res = await api.get(
-        "api/find-users-by-nickname/?username=" + username
-      );
+      console.log("username: ", username);
+      const res = await api.get('api/find-users-by-nickname/?username=' + username);
       setId(res.data[0].id);
+      console.log("res: ", res);
     };
     getUserId();
   }, []);
@@ -108,10 +108,7 @@ export default function NavBar() {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link
-                  to={"profile/" + id + "/" + username}
-                  className="nav-link active"
-                >
+                <Link to={'profile/' + id + '/' + username} className="nav-link active">
                   My profile
                 </Link>
               </li>
